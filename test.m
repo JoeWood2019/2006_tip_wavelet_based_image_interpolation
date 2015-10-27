@@ -20,13 +20,10 @@ figure(1);
 imshow(uint8(input_image));
 
 % Y = waveletbased_sr_grayimage( input_image,k );
-scale = 2;
+scale = 1;
 fu = wavelet1_scale_func( input_image(1,:),scale );
 gu = wavelet1_wavelet_func(input_image(1,:),scale );
-f_inv = wavelet1_inverse_func(gu,fu,2);
-h0 = [0.125,0.375,0.375,0.125];
-h0_j_1 = upsample(h0,2^(scale-1));
-temp = conv(h0_j_1,f_inv);
-scale_func = temp(1+2^(scale-1):2^(scale-1)+length(f_inv));
+f_inv = wavelet1_inverse_func(gu,fu,scale);
+
 % figure;
 % imshow(uint8(Y));
