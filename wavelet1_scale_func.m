@@ -12,7 +12,7 @@ if scale == 1
 else
     scale_func_pre = wavelet1_scale_func( signal,scale-1 );
     sym_signal = fliplr(scale_func_pre);
-    scale_func_pre_sym = [sym_signal(end-additional_sym:end),scale_func_pre,sym_signal(1:additional_sym)];
+    scale_func_pre_sym = [sym_signal(end-additional_sym+1:end),scale_func_pre,sym_signal(1:additional_sym)];
     h0_j_1 = upsample(h0,2^(scale-1));
     temp = conv(h0_j_1,scale_func_pre_sym);
     scale_func = temp(additional_sym+1+2^(scale-1):additional_sym+2^(scale-1)+length(signal));%注意计算小波卷积时，小波系数起点并不是0

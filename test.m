@@ -16,14 +16,23 @@ for i=1:3
 end
 image_ycbcr = rgb2ycbcr(uint8(image));
 input_image = image_ycbcr(:,:,1);
-figure(1);
-imshow(uint8(input_image));
+% figure(1);
+% imshow(uint8(input_image));
 
 % Y = waveletbased_sr_grayimage( input_image,k );
-scale = 1;
+%% 小波和小波逆变换测试
+scale = 2;
 fu = wavelet1_scale_func( input_image(1,:),scale );
 gu = wavelet1_wavelet_func(input_image(1,:),scale );
 f_inv = wavelet1_inverse_func(gu,fu,scale);
 
+% a=wavelet1_scale_func( input_image(1,:),scale-1 );
 % figure;
-% imshow(uint8(Y));
+% subplot(2,1,1);
+% plot(a);
+% subplot(2,1,2);
+% plot(f_inv);
+
+%% 
+gu_hor_init = gu_initial( input_image, 'hor');
+
