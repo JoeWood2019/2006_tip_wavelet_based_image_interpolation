@@ -53,13 +53,35 @@ function [ output_image ] = waveletbased_sr_grayimage( input_image,k )
 % 
 % output_image = idwt2(LL_interp,LH_interp,HL_interp,HH_interp,'haar',SX_interp);
 %%
-f_initial = imresize(input_image,k,'bicubic');
+fu_initial = imresize(input_image,k,'bicubic');
 gu_hor_init = gu_initial( input_image, 'hor');
 gu_ver_init = gu_initial( input_image, 'ver');
-
-for i=1:10
+%% ps bound
+f_gradient = image_gradient(double(input_image));
+w=[0.25,0.5,0.25;0.5,1,0.5;0.25,0.5,0.25];
+f_bicubic = imresize(double(input_image),2,'bicubic');
+f_grad_up = upsample(f_gradient,2);
+ps_bias = imfilter(f_grad_up,w);
+fu_lo = f_bicubic - ps_bias;
+fu_ho = f_bicubic + ps_bias;
+%% 10 pocs loop
+for i=1:1
+    %% pv
+    temp = wavelet2_inverse(fu_initial,gu_hor_init,gu_ver_init,1);
+    [fu_next,gu_hor_next,gu_ver_next] = wavelet2_forward(temp,1);
+    %% ps
+    fu_next = fu_next.*((fu_next - fu_lo) > 0) + fu_lo.*((fu_next - fu_lo) < 0);
+    fu_next = fu_next.*((fu_next - fu_ho) < 0) + fu_ho.*((fu_next - fu_ho) > 0);    
+    fu_next(2:2:end,2:2:end) = double(input_image);
+    %% pE
     
+    %% 
+    fu_initial = fu_next;
+    gu_hor_init = gu_hor_next;
+    gu_ver_init = gu_ver_next;
 end
 
+output_image = wavelet2_inverse(fu_initial,gu_hor_init,gu_ver_init);
+output_image = unit8(output_image);
 end
 

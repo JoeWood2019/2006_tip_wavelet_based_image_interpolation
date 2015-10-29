@@ -21,10 +21,10 @@ input_image = image_ycbcr(:,:,1);
 
 % Y = waveletbased_sr_grayimage( input_image,k );
 %% 小波和小波逆变换测试
-scale = 2;
-fu = wavelet1_scale_func( input_image(1,:),scale );
-gu = wavelet1_wavelet_func(input_image(1,:),scale );
-f_inv = wavelet1_inverse_func(gu,fu,scale);
+scale = 1;
+% fu = wavelet1_scale_func( input_image(1,:),scale );
+% gu = wavelet1_wavelet_func(input_image(1,:),scale );
+% f_inv = wavelet1_inverse_func(gu,fu,scale);
 
 % a=wavelet1_scale_func( input_image(1,:),scale-1 );
 % figure;
@@ -33,6 +33,10 @@ f_inv = wavelet1_inverse_func(gu,fu,scale);
 % subplot(2,1,2);
 % plot(f_inv);
 
+[ fu,gu_hor,gu_ver] = wavelet2_forward(input_image,scale );
+image = wavelet2_inverse( fu,gu_hor,gu_ver,scale );
 %% 
-gu_hor_init = gu_initial( input_image, 'hor');
-
+% gu_hor_init = gu_initial( input_image, 'hor');
+result = waveletbased_sr_grayimage( input_image,2 );
+figure;
+imshow(result);

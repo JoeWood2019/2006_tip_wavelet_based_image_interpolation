@@ -17,6 +17,6 @@ scale_func_sym = [sym_signal(end-additional_sym+1:end),scale_func,sym_signal(1:a
 
 temp = conv(h1_j_1,scale_func_sym);
 wave_func = temp(additional_sym+1:additional_sym+length(signal));%注意计算小波卷积时，小波系数起点并不是0
-wave_func=wave_func/lamda(scale+1);
+wave_func=wave_func/lamda(scale);
 end
 
