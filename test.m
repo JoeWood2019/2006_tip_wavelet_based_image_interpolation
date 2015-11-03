@@ -33,8 +33,8 @@ scale = 1;
 % subplot(2,1,2);
 % plot(f_inv);
 
-[ fu,gu_hor,gu_ver] = wavelet2_forward(input_image,scale );
-image = wavelet2_inverse( fu,gu_hor,gu_ver,scale );
+% [ fu,gu_hor,gu_ver] = wavelet2_forward(input_image,scale );
+% image = wavelet2_inverse( fu,gu_hor,gu_ver,scale );
 %% 
 % gu_hor_init = gu_initial( input_image, 'hor');
 result = waveletbased_sr_grayimage( input_image,2 );

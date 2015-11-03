@@ -54,18 +54,20 @@ function [ output_image ] = waveletbased_sr_grayimage( input_image,k )
 % output_image = idwt2(LL_interp,LH_interp,HL_interp,HH_interp,'haar',SX_interp);
 %%
 fu_initial = imresize(input_image,k,'bicubic');
-gu_hor_init = gu_initial( input_image, 'hor');
-gu_ver_init = gu_initial( input_image, 'ver');
+[gu_hor_init,gu_hor_init_map] = gu_initial( input_image, 'hor');
+[gu_ver_init,gu_ver_init_map] = gu_initial( input_image, 'ver');
 %% ps bound
 f_gradient = image_gradient(double(input_image));
 w=[0.25,0.5,0.25;0.5,1,0.5;0.25,0.5,0.25];
 f_bicubic = imresize(double(input_image),2,'bicubic');
-f_grad_up = upsample(f_gradient,2);
+% f_grad_up = upsample(f_gradient,2);
+f_grad_up = imresize(f_gradient,2,'box');%fu梯度的上采样
 ps_bias = imfilter(f_grad_up,w);
 fu_lo = f_bicubic - ps_bias;
 fu_ho = f_bicubic + ps_bias;
-%% 10 pocs loop
-for i=1:1
+%% pocs_num loop
+pocs_num = 1;
+for i=1:pocs_num
     %% pv
     temp = wavelet2_inverse(fu_initial,gu_hor_init,gu_ver_init,1);
     [fu_next,gu_hor_next,gu_ver_next] = wavelet2_forward(temp,1);
