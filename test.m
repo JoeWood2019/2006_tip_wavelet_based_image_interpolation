@@ -5,7 +5,6 @@ clc;
 k=2;
 
 image_gnd = imread('gnd.bmp');
-% image = image(1:end-1,1:end-1,:);
 gnd_size = size(image_gnd);
 image = zeros([gnd_size(1:2)/k,gnd_size(3)]);
 image_size_gray = size(image(:,:,1));
@@ -37,6 +36,10 @@ scale = 1;
 % image = wavelet2_inverse( fu,gu_hor,gu_ver,scale );
 %% 
 % gu_hor_init = gu_initial( input_image, 'hor');
-result = waveletbased_sr_grayimage( input_image,2 );
+result = waveletbased_sr_grayimage( input_image,k );
+figure;
+imshow(input_image);
 figure;
 imshow(result);
+figure;
+imshow(image_gnd_gray);

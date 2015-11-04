@@ -53,6 +53,7 @@ function [ output_image ] = waveletbased_sr_grayimage( input_image,k )
 % 
 % output_image = idwt2(LL_interp,LH_interp,HL_interp,HH_interp,'haar',SX_interp);
 %%
+input_image = double(input_image);
 fu_initial = imresize(input_image,k,'bicubic');
 [gu_hor_init,gu_hor_init_map] = gu_initial( input_image, 'hor');
 [gu_ver_init,gu_ver_init_map] = gu_initial( input_image, 'ver');
@@ -76,14 +77,17 @@ for i=1:pocs_num
     fu_next = fu_next.*((fu_next - fu_ho) < 0) + fu_ho.*((fu_next - fu_ho) > 0);    
     fu_next(2:2:end,2:2:end) = double(input_image);
     %% pE
-    
+    [ gu_hor_next,gu_hor_init_map_next] = gu_extrema_update( gu_hor_init,gu_hor_init_map,'hor' );
+    [ gu_ver_next,gu_ver_init_map_next] = gu_extrema_update( gu_ver_init,gu_ver_init_map,'hor' );
     %% 
     fu_initial = fu_next;
     gu_hor_init = gu_hor_next;
     gu_ver_init = gu_ver_next;
+    gu_hor_init_map = gu_hor_init_map_next;
+    gu_ver_init_map = gu_ver_init_map_next;
 end
 
-output_image = wavelet2_inverse(fu_initial,gu_hor_init,gu_ver_init);
-output_image = unit8(output_image);
+output_image = wavelet2_inverse(fu_initial,gu_hor_init,gu_ver_init,1);
+output_image = uint8(output_image);
 end
 
