@@ -67,7 +67,7 @@ ps_bias = imfilter(f_grad_up,w);
 fu_lo = f_bicubic - ps_bias;
 fu_ho = f_bicubic + ps_bias;
 %% pocs_num loop
-pocs_num = 1;
+pocs_num = 2;
 for i=1:pocs_num
     %% pv
     temp = wavelet2_inverse(fu_initial,gu_hor_init,gu_ver_init,1);
@@ -78,7 +78,7 @@ for i=1:pocs_num
     fu_next(2:2:end,2:2:end) = double(input_image);
     %% pE
     [ gu_hor_next,gu_hor_init_map_next] = gu_extrema_update( gu_hor_init,gu_hor_init_map,'hor' );
-    [ gu_ver_next,gu_ver_init_map_next] = gu_extrema_update( gu_ver_init,gu_ver_init_map,'hor' );
+    [ gu_ver_next,gu_ver_init_map_next] = gu_extrema_update( gu_ver_init,gu_ver_init_map,'ver' );
     %% 
     fu_initial = fu_next;
     gu_hor_init = gu_hor_next;

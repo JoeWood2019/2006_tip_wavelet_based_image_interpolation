@@ -8,7 +8,7 @@ extre_map_next = extre_map_pre;
 if strcmp(coordinate_flag , 'hor')
     %更新极值点位置
     for i=1:m
-        for j=2:2:n
+        for j=2:2:n-1
             if extre_map_pre(i,j) == 1
                 [~,max_posi] = max([gu_pre(i,j-1),gu_pre(i,j),gu_pre(i,j+1)]);
                 extre_map_next(i,j) = 0;
@@ -37,7 +37,7 @@ if strcmp(coordinate_flag , 'hor')
 elseif strcmp(coordinate_flag , 'ver')
     %更新极值点位置
     for i=1:n
-        for j=2:2:m
+        for j=2:2:m-1
             if extre_map_pre(j,i) == 1
                 [~,max_posi] = max([gu_pre(j-1,i),gu_pre(j,i),gu_pre(j+1,i)]);
                 extre_map_next(j,i) = 0;

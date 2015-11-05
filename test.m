@@ -36,7 +36,10 @@ scale = 1;
 % image = wavelet2_inverse( fu,gu_hor,gu_ver,scale );
 %% 
 % gu_hor_init = gu_initial( input_image, 'hor');
+tic;
 result = waveletbased_sr_grayimage( input_image,k );
+toc;
+display(toc - tic);
 figure;
 imshow(input_image);
 figure;
