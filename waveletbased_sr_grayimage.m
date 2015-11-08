@@ -64,27 +64,58 @@ f_bicubic = imresize(double(input_image),2,'bicubic');
 % f_grad_up = upsample(f_gradient,2);
 f_grad_up = imresize(f_gradient,2,'box');%fu梯度的上采样
 ps_bias = imfilter(f_grad_up,w);
+% fu_lo = f_bicubic - abs(ps_bias);
+% fu_ho = f_bicubic + abs(ps_bias);
 fu_lo = f_bicubic - ps_bias;
 fu_ho = f_bicubic + ps_bias;
 %% pocs_num loop
+[m,n]= size(fu_initial);
 pocs_num = 2;
 for i=1:pocs_num
     %% pv
     temp = wavelet2_inverse(fu_initial,gu_hor_init,gu_ver_init,1);
     [fu_next,gu_hor_next,gu_ver_next] = wavelet2_forward(temp,1);
     %% ps
-    fu_next = fu_next.*((fu_next - fu_lo) > 0) + fu_lo.*((fu_next - fu_lo) < 0);
-    fu_next = fu_next.*((fu_next - fu_ho) < 0) + fu_ho.*((fu_next - fu_ho) > 0);    
-    fu_next(2:2:end,2:2:end) = double(input_image);
+%     fu_next = fu_next.*((fu_next - fu_lo) > 0) + fu_lo.*((fu_next - fu_lo) <= 0);
+%     fu_next = fu_next.*((fu_next - fu_ho) < 0) + fu_ho.*((fu_next - fu_ho) >= 0);    
+    for i=1:m
+        for j=1:n
+            if fu_ho(i,j) >= fu_lo(i,j)
+                if fu_next(i,j) < fu_lo(i,j)
+                    fu_next(i,j) = fu_lo(i,j);
+                end
+                if fu_next(i,j) > fu_ho(i,j)
+                    fu_next(i,j) = fu_ho(i,j);
+                end
+            elseif fu_lo(i,j) >= fu_ho(i,j)
+                if fu_next(i,j) < fu_ho(i,j)
+                    fu_next(i,j) = fu_ho(i,j);
+                end
+                if fu_next(i,j) > fu_lo(i,j)
+                    fu_next(i,j) = fu_lo(i,j);
+                end
+            end
+        end
+    end
+%     fu_next(2:2:end,2:2:end) = double(input_image);
+%  fu_next(1:2:end-1,1:2:end-1) = double(input_image);
     %% pE
-    [ gu_hor_next,gu_hor_init_map_next] = gu_extrema_update( gu_hor_init,gu_hor_init_map,'hor' );
-    [ gu_ver_next,gu_ver_init_map_next] = gu_extrema_update( gu_ver_init,gu_ver_init_map,'ver' );
+    [ gu_hor_init,gu_hor_init_map_next] = gu_extrema_update( gu_hor_next,gu_hor_init_map,'hor' );
+    [ gu_ver_init,gu_ver_init_map_next] = gu_extrema_update( gu_ver_next,gu_ver_init_map,'ver' );
     %% 
-    fu_initial = fu_next;
-    gu_hor_init = gu_hor_next;
-    gu_ver_init = gu_ver_next;
+
     gu_hor_init_map = gu_hor_init_map_next;
     gu_ver_init_map = gu_ver_init_map_next;
+    
+    display(sum(sum(abs(fu_next - fu_initial))));
+    display(sum(sum(abs(gu_hor_init - gu_hor_next))));
+    display(sum(sum(abs(gu_ver_init - gu_ver_next))));
+    
+    fu_initial = fu_next;
+    
+%     gu_hor_init = gu_hor_next;
+%     gu_ver_init = gu_ver_next;
+    
 end
 
 output_image = wavelet2_inverse(fu_initial,gu_hor_init,gu_ver_init,1);
