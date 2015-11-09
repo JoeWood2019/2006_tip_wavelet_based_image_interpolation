@@ -70,7 +70,7 @@ fu_lo = f_bicubic - ps_bias;
 fu_ho = f_bicubic + ps_bias;
 %% pocs_num loop
 [m,n]= size(fu_initial);
-pocs_num = 2;
+pocs_num = 1;
 for i=1:pocs_num
     %% pv
     temp = wavelet2_inverse(fu_initial,gu_hor_init,gu_ver_init,1);
@@ -78,26 +78,26 @@ for i=1:pocs_num
     %% ps
 %     fu_next = fu_next.*((fu_next - fu_lo) > 0) + fu_lo.*((fu_next - fu_lo) <= 0);
 %     fu_next = fu_next.*((fu_next - fu_ho) < 0) + fu_ho.*((fu_next - fu_ho) >= 0);    
-    for i=1:m
+    for h=1:m
         for j=1:n
-            if fu_ho(i,j) >= fu_lo(i,j)
-                if fu_next(i,j) < fu_lo(i,j)
-                    fu_next(i,j) = fu_lo(i,j);
+            if fu_ho(h,j) >= fu_lo(h,j)
+                if fu_next(h,j) < fu_lo(h,j)
+                    fu_next(h,j) = fu_lo(h,j);
                 end
-                if fu_next(i,j) > fu_ho(i,j)
-                    fu_next(i,j) = fu_ho(i,j);
+                if fu_next(h,j) > fu_ho(h,j)
+                    fu_next(h,j) = fu_ho(h,j);
                 end
-            elseif fu_lo(i,j) >= fu_ho(i,j)
-                if fu_next(i,j) < fu_ho(i,j)
-                    fu_next(i,j) = fu_ho(i,j);
+            elseif fu_lo(h,j) >= fu_ho(h,j)
+                if fu_next(h,j) < fu_ho(h,j)
+                    fu_next(h,j) = fu_ho(h,j);
                 end
-                if fu_next(i,j) > fu_lo(i,j)
-                    fu_next(i,j) = fu_lo(i,j);
+                if fu_next(h,j) > fu_lo(h,j)
+                    fu_next(h,j) = fu_lo(h,j);
                 end
             end
         end
     end
-%     fu_next(2:2:end,2:2:end) = double(input_image);
+    fu_next(2:2:end,2:2:end) = double(input_image);
 %  fu_next(1:2:end-1,1:2:end-1) = double(input_image);
     %% pE
     [ gu_hor_init,gu_hor_init_map_next] = gu_extrema_update( gu_hor_next,gu_hor_init_map,'hor' );

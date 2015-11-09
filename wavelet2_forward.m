@@ -4,6 +4,7 @@ function [ fu,gu_hor,gu_ver] = wavelet2_forward( fu_pre,scale )
 h0 = [0.125,0.375,0.375,0.125];
 h1 = [0.5,-0.5];
 lamda = [1,0.75,0.6875,0.6719,0.6680,0.6670,0.6668];
+% lamda = ones(10,1);
 
 [m,n] = size(fu_pre);
 

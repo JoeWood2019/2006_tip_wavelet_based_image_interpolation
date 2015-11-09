@@ -36,6 +36,7 @@ scale = 1;
 % image_out = wavelet2_inverse( fu,gu_hor,gu_ver,scale );
 % figure;
 % imshow(uint8(image_out));
+% imwrite(uint8(image_out),'h1_changed_nolamda.png','png');
 %% 
 % gu_hor_init = gu_initial( input_image, 'hor');
 
