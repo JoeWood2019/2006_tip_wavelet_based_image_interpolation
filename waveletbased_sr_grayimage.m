@@ -3,12 +3,12 @@ function [ output_image ] = waveletbased_sr_grayimage( input_image,k )
 
 % sX=size(input_image);
 % 
-% % [swa,swh,swv,swd]= swt2(input_image,1,'bior4.4');
+% [swa,swh,swv,swd]= swt2(input_image,1,'bior4.4');
 % % figure(2);
 % % subplot(2,2,1);imshow(uint8(swa/2));title('LL band of image');
 % % subplot(2,2,2);imshow(swh);title('LH band of image');
 % % subplot(2,2,3);imshow(swv);title('HL band of image');
-% % subplot(2,2,4);imshow(swd);title('HH band of image');
+% % subplot(2,2,4);imshow(swd);title('HH band of image');% 
 % 
 % % X = idwt2(swa,swh,swv,swd,'db1',sX);
 % % result = uint8(X);

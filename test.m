@@ -2,8 +2,8 @@ clear all;
 close all;
 clc;
 
-k=2;
-
+k=2;%放大倍数
+%% 输入图像
 image_gnd = imread('gnd.bmp');
 gnd_size = size(image_gnd);
 image = zeros([gnd_size(1:2)/k,gnd_size(3)]);
@@ -37,16 +37,37 @@ scale = 1;
 % figure;
 % imshow(uint8(image_out));
 % imwrite(uint8(image_out),'h1_changed_nolamda.png','png');
-%% 
+%% tip2006方法测试
 % gu_hor_init = gu_initial( input_image, 'hor');
 
-tic;
-result = waveletbased_sr_grayimage( input_image,k );
-toc;
-display(toc - tic);
+% tic;
+% result = waveletbased_sr_grayimage( input_image,k );
+% toc;
+% display(toc - tic);
+% figure;
+% imshow(input_image);
+% figure;
+% imshow(result);
+% figure;
+% imshow(image_gnd_gray);
+
+%% 尝试MATLAB自带swt
+
+% wname = 'rbio2.2';
+% [Lo_D,Hi_D,Lo_R,Hi_R] = wfilters(wname); 
+% subplot(221); stem(Lo_D); 
+% title('Decomposition low-pass filter'); 
+% subplot(222); stem(Hi_D); 
+% title('Decomposition high-pass filter'); 
+% subplot(223); stem(Lo_R); 
+% title('Reconstruction low-pass filter'); 
+% subplot(224); stem(Hi_R); 
+% title('Reconstruction high-pass filter'); 
+
+[swa,swh,swv,swd]= swt2(input_image,1,'rbio2.2');
 figure;
-imshow(input_image);
-figure;
-imshow(result);
-figure;
-imshow(image_gnd_gray);
+subplot(2,2,1);imshow(uint8(swa/2));title('LL band of image');
+subplot(2,2,2);imshow(swh);title('LH band of image');
+subplot(2,2,3);imshow(swv);title('HL band of image');
+subplot(2,2,4);imshow(swd);title('HH band of image');% 
+
